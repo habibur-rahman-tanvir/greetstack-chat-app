@@ -3,7 +3,7 @@ import { router } from "./routes";
 
 const App = () => {
   return (
-    <div className="bg-[url('./assets/bgImage.svg')] bg-center min-h-screen bg-cover">
+    <div className="bg-[url('./assets/bgImage.svg')] bg-center bg-cover">
       <RouterProvider router={router} />
     </div>
   );

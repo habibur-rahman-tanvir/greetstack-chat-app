@@ -5,7 +5,7 @@ import Sidebar from "@/components/Sidebar";
 import { useState } from "react";
 
 const HomePage = () => {
-  const [selectedUser, setSelectedUser] = useState<any>(false);
+  const [selectedUser, setSelectedUser] = useState<any>(null);
 
   return (
     <div className="border w-full h-screen sm:px-[15%] sm:py-[5%]">
@@ -21,7 +21,10 @@ const HomePage = () => {
           selectedUser={selectedUser}
           setSelectedUser={setSelectedUser}
         />
-        <ChatContainer />
+        <ChatContainer
+          selectedUser={selectedUser}
+          setSelectedUser={setSelectedUser}
+        />
         <RightSidebar />
       </div>
     </div>
