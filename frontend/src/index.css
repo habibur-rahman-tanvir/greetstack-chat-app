@@ -1,1 +1,11 @@
+@import url("https://fonts.googleapis.com/css2?family=Delius&family=Outfit:wght@100..900&display=swap");
+
 @import "tailwindcss";
+
+* {
+  font-family: "Delius", sans-serif;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}

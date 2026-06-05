@@ -1,9 +1,10 @@
-import HelloWorld from "@/components/HelloWorld";
+import { RouterProvider } from "react-router";
+import { router } from "./routes";
 
 const App = () => {
   return (
-    <div>
-      <HelloWorld />
+    <div className="bg-[url('./assets/bgImage.svg')] bg-center min-h-screen bg-cover">
+      <RouterProvider router={router} />
     </div>
   );
 };
