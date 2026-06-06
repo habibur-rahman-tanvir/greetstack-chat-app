@@ -2,7 +2,7 @@ import assets from "@/assets/assets";
 import { useState } from "react";
 
 const LoginPage = () => {
-  const [currState, setCurrState] = useState("Sign up");
+  const [currState, setCurrState] = useState<"Sign up" | "Login">("Sign up");
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -11,6 +11,11 @@ const LoginPage = () => {
 
   const onSubmitHandler = (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    if (currState === "Sign up" && !isDataSubmitted) {
+      setIsDataSubmitted(true);
+      return;
+    }
   };
 
   return (
@@ -79,7 +84,7 @@ const LoginPage = () => {
         )}
 
         <button
-          className="py-3 bg-linear-to-r from-purple-400 to-violet-600 text-white rounded-full cursor-pointer"
+          className="py-3 bg-linear-to-r from-purple-400 to-violet-600 text-white rounded-xl cursor-pointer"
           type="submit"
         >
           {currState === "Sign up" ? "Create Account" : "Login Now"}
