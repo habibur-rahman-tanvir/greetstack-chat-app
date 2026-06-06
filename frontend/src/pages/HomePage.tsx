@@ -25,7 +25,7 @@ const HomePage = () => {
           selectedUser={selectedUser}
           setSelectedUser={setSelectedUser}
         />
-        <RightSidebar />
+        <RightSidebar selectedUser={selectedUser} />
       </div>
     </div>
   );
