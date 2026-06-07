@@ -2,10 +2,15 @@
 import ChatContainer from "@/components/ChatContainer";
 import RightSidebar from "@/components/RightSidebar";
 import Sidebar from "@/components/Sidebar";
-import { useState } from "react";
+import { AuthContext } from "@/contexts/AuthContext";
+import { useContext, useState } from "react";
+import { Navigate } from "react-router";
 
 const HomePage = () => {
   const [selectedUser, setSelectedUser] = useState<any>(null);
+
+  const { authUser } = useContext(AuthContext);
+  if (!authUser) return <Navigate to={"/login"} />;
 
   return (
     <div className="border w-full h-screen sm:px-[15%] sm:py-[5%]">

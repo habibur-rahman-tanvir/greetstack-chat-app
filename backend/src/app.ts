@@ -12,8 +12,8 @@ app.set("trust proxy", 1);
 app.use(corsMiddleware);
 
 app.use(morgan("dev", { skip: () => isProduction() }));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
 app.use("/api/status", (req, res) => res.send("Server is live"));
 app.use("/api/auth", userRouter);

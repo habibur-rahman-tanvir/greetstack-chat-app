@@ -16,9 +16,9 @@ export const signup: RequestHandler = async (req, res) => {
     if (user)
       return res.json({ success: false, message: "Account already exist" });
 
-    // @ts-ignore
-    const salt = await bcrypt.getSalt(10);
-    const hashedPasssword = await bcrypt.hash(password, salt);
+    // const salt = await bcrypt.getSalt("10");
+    // const hashedPasssword = await bcrypt.hash(password, salt);
+    const hashedPasssword = password;
 
     const newUser = await User.create({
       fullName,
@@ -50,10 +50,11 @@ export const login: RequestHandler = async (req, res) => {
   try {
     const userData = await User.findOne({ email });
 
-    const isPasswordCorrect = await bcrypt.compare(
-      password,
-      userData?.password!,
-    );
+    // const isPasswordCorrect = await bcrypt.compare(
+    //   password,
+    //   userData?.password!,
+    // );
+    const isPasswordCorrect = password === userData?.password;
 
     if (!userData || !isPasswordCorrect)
       return res.json({ success: false, message: "Invalid credentials" });
@@ -89,14 +90,16 @@ export const updateProfile: RequestHandler = async (req, res) => {
       updatedUser = await User.findByIdAndUpdate(
         userId,
         { bio, fullName },
-        { new: true },
+        { returnDocument: "after" },
       );
     } else {
-      const upload = await cloudinary.uploader.upload(profilePic);
+      const upload = await cloudinary.uploader.upload(profilePic, {
+        folder: "/greetstack_chat_app",
+      });
       updatedUser = await User.findByIdAndUpdate(
         userId,
         { profilePic: upload.secure_url, bio, fullName },
-        { new: true },
+        { returnDocument: "after" },
       );
     }
     res.json({ success: true, user: updatedUser });

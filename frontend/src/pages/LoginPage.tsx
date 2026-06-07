@@ -1,5 +1,7 @@
 import assets from "@/assets/assets";
-import { useState } from "react";
+import { AuthContext } from "@/contexts/AuthContext";
+import { useContext, useState } from "react";
+import { Navigate } from "react-router";
 
 const LoginPage = () => {
   const [currState, setCurrState] = useState<"Sign up" | "Login">("Sign up");
@@ -9,6 +11,9 @@ const LoginPage = () => {
   const [bio, setBio] = useState("");
   const [isDataSubmitted, setIsDataSubmitted] = useState(false);
 
+  const { authUser, login } = useContext(AuthContext);
+  if (authUser) return <Navigate to={"/"} />;
+
   const onSubmitHandler = (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -16,6 +21,13 @@ const LoginPage = () => {
       setIsDataSubmitted(true);
       return;
     }
+
+    login(currState === "Sign up" ? "signup" : "login", {
+      fullName,
+      email,
+      password,
+      bio,
+    });
   };
 
   return (
