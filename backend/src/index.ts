@@ -35,6 +35,12 @@ io.on("connection", (socket) => {
   console.log("Userconnected: ", userId);
 
   if (userId) userSocketMap[userId] = userId;
+
+  io.emit("getOnlineUsers", Object.keys(userSocketMap));
+
+  socket.on("disconnect", (reason) => {
+    console.log("User disconnected:", userId);
+  });
 });
 
 const run = async () => {
