@@ -22,13 +22,13 @@ const cert = fs.readFileSync(
 
 const server = https.createServer({ key, cert }, app);
 
-const io = new Server(server, {
+export const io = new Server(server, {
   cors: {
     origin: "*",
   },
 });
 
-const userSocketMap: { [userId: string]: string } = {}; // {userId: socketId}
+export const userSocketMap: { [userId: string]: string } = {}; // {userId: socketId}
 
 io.on("connection", (socket) => {
   const userId: string = socket.handshake.query.userId as string;
@@ -40,6 +40,8 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", (reason) => {
     console.log("User disconnected:", userId);
+    delete userSocketMap[userId];
+    io.emit("getOnlineUsers", Object.keys(userSocketMap));
   });
 });
 

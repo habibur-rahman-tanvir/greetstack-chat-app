@@ -3,6 +3,7 @@ import { User } from "../models/user/User.model.js";
 import { Message } from "../models/message/Message.model.js";
 import type mongoose from "mongoose";
 import { cloudinary } from "../configs/cloudinary.js";
+import { io, userSocketMap } from "../index.js";
 
 export const getUsersForSidebar: RequestHandler = async (req, res) => {
   try {
@@ -92,6 +93,12 @@ export const sendMessage: RequestHandler = async (req, res) => {
       text,
       image: imageUrl,
     });
+
+    // @ts-ignore
+    const receiverSocketId = userSocketMap[receiverId];
+    if (receiverSocketId) {
+      io.to(receiverId!).emit("newmessage", newMessage);
+    }
 
     res.json({ success: true, newMessage });
   } catch (err: any) {
