@@ -65,7 +65,7 @@ export const login: RequestHandler = async (req, res) => {
       success: true,
       userData: userData,
       token,
-      messages: "Login successfull",
+      message: "Login successfull",
     });
   } catch (err: any) {
     console.log(err);
