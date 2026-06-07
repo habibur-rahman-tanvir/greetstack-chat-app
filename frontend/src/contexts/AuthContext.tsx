@@ -41,11 +41,10 @@ export const AuthProvider = ({ children }) => {
         toast.success(data.message);
       } else {
         toast.error(data.message);
-        console.log("Hi");
       }
     } catch (err) {
       console.log(err);
-      // toast.error(err.message);
+      toast.error(err.message);
     }
   };
 
@@ -62,7 +61,6 @@ export const AuthProvider = ({ children }) => {
   const updateProfile = async (body) => {
     try {
       const { data } = await axios.put("/api/auth/update-profile", body);
-      console.log(data);
       if (data.success) {
         setAuthUser(data.user);
         toast.success("Profile updated successfully");
