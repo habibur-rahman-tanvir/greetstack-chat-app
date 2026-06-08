@@ -4,6 +4,7 @@ import { Message } from "../models/message/Message.model.js";
 import type mongoose from "mongoose";
 import { cloudinary } from "../configs/cloudinary.js";
 import { io, userSocketMap } from "../index.js";
+import { CLOUDINAR_FOLDER } from "../constants/constatnt.js";
 
 export const getUsersForSidebar: RequestHandler = async (req, res) => {
   try {
@@ -82,7 +83,9 @@ export const sendMessage: RequestHandler = async (req, res) => {
 
     let imageUrl;
     if (image) {
-      const uploadResponse = await cloudinary.uploader.upload(image);
+      const uploadResponse = await cloudinary.uploader.upload(image, {
+        folder: `${CLOUDINAR_FOLDER}/chat_images`,
+      });
       imageUrl = uploadResponse.secure_url;
     }
 

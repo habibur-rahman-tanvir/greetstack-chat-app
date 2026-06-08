@@ -3,6 +3,7 @@ import { User } from "../models/user/User.model.js";
 import bcrypt from "bcryptjs";
 import { generateToken } from "../utilities/utils.js";
 import { cloudinary } from "../configs/cloudinary.js";
+import { CLOUDINAR_FOLDER } from "../constants/constatnt.js";
 
 export const signup: RequestHandler = async (req, res) => {
   const { fullName, email, password, bio } = req.body;
@@ -94,7 +95,7 @@ export const updateProfile: RequestHandler = async (req, res) => {
       );
     } else {
       const upload = await cloudinary.uploader.upload(profilePic, {
-        folder: "/greetstack_chat_app",
+        folder: `${CLOUDINAR_FOLDER}/avatar`,
       });
       updatedUser = await User.findByIdAndUpdate(
         userId,
