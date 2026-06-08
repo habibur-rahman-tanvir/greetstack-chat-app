@@ -15,7 +15,9 @@ const ChatContainer = () => {
   const [input, setInput] = useState<string>("");
 
   const handleSendMessage = async (
-    e: React.KeyboardEvent<HTMLInputElement>,
+    e:
+      | React.KeyboardEvent<HTMLInputElement>
+      | React.MouseEvent<HTMLImageElement, MouseEvent>,
   ) => {
     e.preventDefault();
 
