@@ -1,12 +1,32 @@
-import assets, { userDummyData } from "@/assets/assets";
+import assets from "@/assets/assets";
 import { AuthContext } from "@/contexts/AuthContext";
-import { useContext } from "react";
+import { ChatContext } from "@/contexts/ChatContext";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
-const Sidebar = ({ selectedUser, setSelectedUser }) => {
+const Sidebar = () => {
+  const {
+    users,
+    getUsers,
+    selectedUser,
+    setSelectedUser,
+    unseenMessages,
+    setUnseenMessages,
+  } = useContext(ChatContext);
+  const { logout, onlineUsers } = useContext(AuthContext);
+
+  const [input, setInput] = useState("");
+  const filteredUsers = input
+    ? users.filter((user) =>
+        user.fullName.toLowerCase().includes(input.toLowerCase()),
+      )
+    : users;
+
   const navigate = useNavigate();
 
-  const { logout } = useContext(AuthContext);
+  useEffect(() => {
+    getUsers();
+  }, [onlineUsers]);
 
   return (
     <div
@@ -46,20 +66,27 @@ const Sidebar = ({ selectedUser, setSelectedUser }) => {
             className="bg-transparent border-none outline-none text-white text-sm placeholder-[#c8c8c8] flex-1"
             type="text"
             placeholder="Search user..."
+            onChange={(e) => setInput(e.target.value)}
           />
         </div>
       </div>
 
       <div className="flex flex-col">
-        {userDummyData.map((user, index) => (
+        {filteredUsers.map((user) => (
           <div
             className={`
               relative flex items-center gap-2 p-2 pl-4
               rounded cursor-pointer max-sm:text-sm
               ${selectedUser?._id === user._id && "bg-[#282142]/50"}
             `}
-            onClick={() => setSelectedUser(user)}
-            key={index}
+            onClick={() => {
+              setSelectedUser(user);
+              setUnseenMessages((prev) => ({
+                ...prev,
+                [user._id]: 0,
+              }));
+            }}
+            key={user._id}
           >
             <img
               className="w-8 rounded-full aspect-square"
@@ -69,16 +96,16 @@ const Sidebar = ({ selectedUser, setSelectedUser }) => {
 
             <div className="flex flex-col leading-5">
               <p>{user.fullName}</p>
-              {index < 3 ? (
+              {onlineUsers.includes(user._id) ? (
                 <span className="text-xs text-green-400">Online</span>
               ) : (
                 <span className="text-xs text-neutral-400">Offline</span>
               )}
             </div>
 
-            {index > 2 && (
+            {unseenMessages[user._id] > 0 && (
               <p className="absolute flex items-center justify-center w-5 h-5 text-xs rounded-full top-4 right-4 bg-violet-500/50">
-                {index}
+                {unseenMessages[user._id]}
               </p>
             )}
           </div>

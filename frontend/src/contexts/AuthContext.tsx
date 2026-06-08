@@ -16,6 +16,21 @@ export const AuthProvider = ({ children }) => {
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [socket, setSocket] = useState(null);
 
+  const connectSocket = (userData) => {
+    if (userData && !socket?.connected) {
+      const newSocket = io(backendUrl, {
+        query: {
+          userId: userData._id,
+        },
+      });
+      newSocket.connect();
+      setSocket(newSocket);
+      newSocket.on("getOnlineUsers", (userIds) => {
+        setOnlineUsers(userIds);
+      });
+    }
+  };
+
   const checkAuth = async () => {
     try {
       const { data } = await axios.get("/api/auth/check");
@@ -71,28 +86,12 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const connectSocket = (userData) => {
-    if (!userData || socket?.connected) {
-      const newSocket = io(backendUrl, {
-        query: {
-          userId: userData._id,
-        },
-      });
-      newSocket.connect();
-      setSocket(newSocket);
-      newSocket.on("getOnlineUsers", (userIds) => {
-        setOnlineUsers(userIds);
-      });
-    }
-  };
-
   useEffect(() => {
     if (token) {
       axios.defaults.headers.common["token"] = token;
     }
     // eslint-disable-next-line react-hooks/set-state-in-effect
     checkAuth();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const value = {
